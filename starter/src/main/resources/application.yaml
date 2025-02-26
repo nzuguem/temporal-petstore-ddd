@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: petstore
+  temporal:
+    start-workers: true
+    namespace: ${namespace:default}
+    connection:
+      target: ${target:127.0.0.1:7233}
+      apiKey: ${api_key:}
+    workflow-cache:
+      using-virtual-workflow-threads: true
+    workersAutoDiscovery:
+      packages: me.nzuguem.petstore
+    workers:
+    - task-queue: purchase-order-tasks
+      name: purchase-order-tasks-worker
+      virtual-thread:
+        using-virtual-threads: true
+
+## OpenTelemetry
+### https://github.com/spring-projects/spring-boot/issues/41460#issuecomment-2399968462
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  opentelemetry:
+    resource-attributes:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317/v1/traces
+      export:
+        enabled: true
+      transport: grpc
+    logging:
+      export:
+        enabled: true
+      transport: grpc
+      endpoint: http://localhost:4317/v1/logs
+
+app:
+  symmetric-codec:
+    key: ${codec_key:Bp%qO*uf69ULbcfM}
