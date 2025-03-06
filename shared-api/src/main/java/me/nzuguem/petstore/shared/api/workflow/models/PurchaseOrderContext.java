@@ -1,7 +1,9 @@
 package me.nzuguem.petstore.shared.api.workflow.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import me.nzuguem.petstore.shared.api.inventory.models.CheckInventoryRequest;
 import me.nzuguem.petstore.shared.api.notification.models.OrderErrorEmailNotificationRequest;
@@ -19,6 +21,8 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public final class PurchaseOrderContext {
 
     private String requestedByUser;

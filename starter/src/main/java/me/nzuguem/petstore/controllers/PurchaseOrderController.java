@@ -41,7 +41,7 @@ public class PurchaseOrderController {
             // Start the workflow
             var workflow = client.newWorkflowStub(PurchaseOrderWorkflow.class,
                     WorkflowOptions.newBuilder()
-                            .setWorkflowId("OrderPurchase-" + requestId.toString())
+                            .setWorkflowId("OrderPurchase-" + requestId)
                             .setTaskQueue(PurchaseOrderWorkflow.TASK_QUEUE).build());
 
             // Create the context

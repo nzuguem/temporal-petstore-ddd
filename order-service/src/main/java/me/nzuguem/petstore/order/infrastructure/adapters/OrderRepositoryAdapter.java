@@ -1,8 +1,8 @@
 package me.nzuguem.petstore.order.infrastructure.adapters;
 
 import me.nzuguem.petstore.order.domain.spi.OrderRepository;
-import org.springframework.stereotype.Component;
+import me.nzuguem.petstore.shared.api.docs.annotations.Adapter;
 
-@Component
+@Adapter
 public class OrderRepositoryAdapter implements OrderRepository {
 }

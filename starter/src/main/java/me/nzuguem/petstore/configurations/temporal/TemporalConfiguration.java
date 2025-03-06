@@ -21,16 +21,20 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Configuration
-public class TemporalClientConfiguration {
+public class TemporalConfiguration {
 
     @Bean
-    public TemporalOptionsCustomizer<WorkflowClientOptions.Builder> customClientOptions() {
+    public TemporalOptionsCustomizer<WorkflowClientOptions.Builder> customClientOptions(
+            MDCContextPropagator mdcContextPropagator
+    ) {
+
         return new TemporalOptionsCustomizer<WorkflowClientOptions.Builder>() {
+
             @Override
             public WorkflowClientOptions.Builder customize(
                     WorkflowClientOptions.Builder optionsBuilder) {
 
-                optionsBuilder.setContextPropagators(List.of(new MDCContextPropagator()));
+                optionsBuilder.setContextPropagators(List.of(mdcContextPropagator));
 
                 return optionsBuilder;
             }

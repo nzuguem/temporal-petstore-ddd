@@ -11,7 +11,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @ActivityImpl(taskQueues = ShipperActivities.TASK_QUEUE)
-public class ShipmentService implements ShipperActivities {
+public class ShipmentApplicationService implements ShipperActivities {
 
     @Override
     public String createTrackingNumber(CreateTrackingNumberRequest request) {

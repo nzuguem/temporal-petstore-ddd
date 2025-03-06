@@ -2,7 +2,7 @@ package me.nzuguem.petstore.payment.domain.services;
 
 import me.nzuguem.petstore.payment.domain.models.Debit;
 import me.nzuguem.petstore.payment.domain.spi.PaymentOperations;
-import me.nzuguem.petstore.shared.api.annotations.DomainService;
+import me.nzuguem.petstore.shared.api.docs.annotations.DomainService;
 
 import java.util.Objects;
 

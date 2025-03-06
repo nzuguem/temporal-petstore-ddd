@@ -4,7 +4,7 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import me.nzuguem.petstore.shared.api.annotations.DomainService;
+import me.nzuguem.petstore.shared.api.docs.annotations.DomainService;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
@@ -22,7 +22,7 @@ public class ArchitectureTests {
                     .dependOnClassesThat()
                     .resideOutsideOfPackages(
                             "..domain..", "..java..",
-                            "..shared.api.annotations..", "..shared.api.order.exceptions..",
+                            "..shared.api.docs.annotations..", "..shared.api.order.exceptions..",
                             "..shared.api.order.models..", "..lombok..",
                             "..jakarta..");
 

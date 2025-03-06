@@ -1,11 +1,11 @@
-package me.nzuguem.petstore.notification.infrastructure.adapters;
+package me.nzuguem.petstore.notification.domain.spi.stubs;
 
 import me.nzuguem.petstore.notification.domain.models.EmailNotification;
 import me.nzuguem.petstore.notification.domain.spi.EmailOperations;
-import me.nzuguem.petstore.shared.api.docs.annotations.Adapter;
+import me.nzuguem.petstore.shared.api.docs.annotations.Stub;
 
-@Adapter
-public class EmailOperationsAdapter implements EmailOperations {
+@Stub
+public class EmailOperationsStub implements EmailOperations {
 
     @Override
     public void sendEmail(EmailNotification request) {

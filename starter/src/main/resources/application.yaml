@@ -38,7 +38,7 @@ management:
       transport: grpc
     logging:
       export:
-        enabled: true
+        enabled: false
       transport: grpc
       endpoint: http://localhost:4317/v1/logs
 

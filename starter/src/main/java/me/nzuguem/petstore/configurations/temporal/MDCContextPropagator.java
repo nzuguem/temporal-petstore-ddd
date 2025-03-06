@@ -11,6 +11,7 @@ import org.slf4j.MDC;
 import io.temporal.api.common.v1.Payload;
 import io.temporal.common.context.ContextPropagator;
 import io.temporal.common.converter.GlobalDataConverter;
+import org.springframework.stereotype.Component;
 
 /**
  * A {@link ContextPropagator} implementation that propagates the SLF4J MDC
@@ -19,6 +20,7 @@ import io.temporal.common.converter.GlobalDataConverter;
  * propagated.
  */
 @Slf4j
+@Component
 public class MDCContextPropagator implements ContextPropagator {
 
     public MDCContextPropagator() {
