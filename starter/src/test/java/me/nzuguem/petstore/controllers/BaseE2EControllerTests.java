@@ -12,7 +12,9 @@ abstract class BaseE2EControllerTests extends BaseE2ETests {
 
 
     @BeforeEach
-    void setUp() {
+    @Override
+    protected void setUp() {
+        super.setUp();
         RestAssured.port = this.port;
     }
 }

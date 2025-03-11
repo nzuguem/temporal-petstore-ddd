@@ -8,6 +8,7 @@ import io.temporal.workflow.Workflow;
 import me.nzuguem.petstore.shared.api.inventory.exceptions.OutOfStockException;
 import me.nzuguem.petstore.shared.api.inventory.temporal.InventoryActivities;
 import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
+import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.models.PurchaseOrderContext;
 import me.nzuguem.petstore.shared.api.workflow.temporal.PurchaseOrderWorkflow;
 import me.nzuguem.petstore.shared.api.order.models.MarkOrderFailedRequest;
@@ -27,11 +28,12 @@ public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
 
     private static final Logger log = Workflow.getLogger(PurchaseOrderWorkflowImpl.class);
 
-    private final OrderNotificationActivities orderNotificationActivities = ActivitiesProvider.getOrderNotificationActivities();
-    private final OrderServiceActivities orderServiceActivities = ActivitiesProvider.getOrderServiceActivities();
-    private final PaymentActivities paymentActivities = ActivitiesProvider.getPaymentActivities();
-    private final InventoryActivities inventoryActivities = ActivitiesProvider.getInventoryActivities();
-    private final ShipperActivities shipperActivities = ActivitiesProvider.getShipperActivities();
+    private final OrderNotificationActivities orderNotificationActivities = ActivitiesAndNexusProvider.getOrderNotificationActivities();
+    private final OrderServiceActivities orderServiceActivities = ActivitiesAndNexusProvider.getOrderServiceActivities();
+    private final PaymentActivities paymentActivities = ActivitiesAndNexusProvider.getPaymentActivities();
+    private final PaymentNexusService paymentNexusService = ActivitiesAndNexusProvider.getPaymentNexusService();
+    private final InventoryActivities inventoryActivities = ActivitiesAndNexusProvider.getInventoryActivities();
+    private final ShipperActivities shipperActivities = ActivitiesAndNexusProvider.getShipperActivities();
 
     @Override
     public void placeOrder(PurchaseOrderContext ctx) {
@@ -139,7 +141,7 @@ public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
         // Create the reversal in case of compensations later
         saga.addCompensation(() -> this.paymentActivities.reversePaymentTransactions(ctx.toReverseActionsForTransactionRequest()));
         // debit card and return some sort of auth number or whatever
-        this.paymentActivities.debitCreditCard(ctx.toDebitCreditCardRequest());
+        this.paymentNexusService.debitCreditCard(ctx.toDebitCreditCardRequest());
 
     }
 

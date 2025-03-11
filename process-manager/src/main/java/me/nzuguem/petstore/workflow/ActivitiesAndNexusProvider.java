@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import io.temporal.activity.ActivityCancellationType;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
+import io.temporal.workflow.NexusOperationOptions;
+import io.temporal.workflow.NexusServiceOptions;
 import io.temporal.workflow.Workflow;
 import jakarta.validation.ConstraintViolationException;
 import lombok.experimental.UtilityClass;
 import me.nzuguem.petstore.shared.api.inventory.exceptions.OutOfStockException;
 import me.nzuguem.petstore.shared.api.inventory.temporal.InventoryActivities;
 import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
+import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.exceptions.PurchasingException;
 import me.nzuguem.petstore.shared.api.order.temporal.OrderServiceActivities;
 import me.nzuguem.petstore.shared.api.payment.exceptions.BadPaymentInfoException;
@@ -20,7 +23,7 @@ import me.nzuguem.petstore.shared.api.shipment.temporal.ShipperActivities;
 import java.time.Duration;
 
 @UtilityClass
-public class ActivitiesProvider {
+public class ActivitiesAndNexusProvider {
 
     private final static ActivityOptions options = ActivityOptions.newBuilder()
             .setStartToCloseTimeout(Duration.ofSeconds(30))
@@ -84,6 +87,20 @@ public class ActivitiesProvider {
                 .build();
 
         return Workflow.newActivityStub(ShipperActivities.class, newOptions);
+    }
+
+    public static PaymentNexusService getPaymentNexusService() {
+        return Workflow.newNexusServiceStub(
+                PaymentNexusService.class,
+                NexusServiceOptions.newBuilder()
+                        .setEndpoint(PaymentNexusService.ENDPOINT)
+                        .setOperationOptions(
+                            NexusOperationOptions.newBuilder()
+                                    .setScheduleToCloseTimeout(Duration.ofSeconds(30))
+                                    .build()
+                        )
+                        .build()
+        );
     }
 
 }

@@ -1,13 +1,18 @@
 package me.nzuguem.petstore;
 
+import io.temporal.api.nexus.v1.Endpoint;
+import io.temporal.testing.TestWorkflowEnvironment;
 import me.nzuguem.petstore.configurations.DevServicesConfiguration;
 import me.nzuguem.petstore.shared.api.order.models.CreditCardInfo;
 import me.nzuguem.petstore.shared.api.order.models.Product;
 import me.nzuguem.petstore.shared.api.payment.models.PaymentType;
+import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.models.PurchaseOrderContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
@@ -24,6 +29,11 @@ import java.util.UUID;
 @DirtiesContext
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public abstract class BaseE2ETests {
+
+    @Autowired
+    protected TestWorkflowEnvironment testWorkflowEnvironment;
+
+    private Endpoint paymentNexusEndpoint;
 
     protected static final PurchaseOrderContext BASE_CTX = PurchaseOrderContext.builder()
             .transactionId(UUID.randomUUID())
@@ -47,4 +57,15 @@ public abstract class BaseE2ETests {
             .requestedByHost("0.0.0.0")
             .requestedByUser("anonymous")
             .build();
+
+    protected void setUp() {
+        this.paymentNexusEndpoint = this.testWorkflowEnvironment.createNexusEndpoint(
+                PaymentNexusService.ENDPOINT,
+                PaymentNexusService.TASK_QUEUE);
+    }
+
+    @AfterEach
+    protected void tearDown() {
+        this.testWorkflowEnvironment.deleteNexusEndpoint(this.paymentNexusEndpoint);
+    }
 }

@@ -28,7 +28,7 @@ public class TemporalConfiguration {
             MDCContextPropagator mdcContextPropagator
     ) {
 
-        return new TemporalOptionsCustomizer<WorkflowClientOptions.Builder>() {
+        return new TemporalOptionsCustomizer<>() {
 
             @Override
             public WorkflowClientOptions.Builder customize(

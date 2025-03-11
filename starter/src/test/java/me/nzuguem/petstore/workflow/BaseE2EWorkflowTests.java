@@ -2,9 +2,10 @@ package me.nzuguem.petstore.workflow;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.testing.TestWorkflowEnvironment;
 import me.nzuguem.petstore.BaseE2ETests;
+import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.temporal.PurchaseOrderWorkflow;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -17,15 +18,14 @@ abstract class BaseE2EWorkflowTests extends BaseE2ETests {
     protected ConfigurableApplicationContext applicationContext;
 
     @Autowired
-    protected TestWorkflowEnvironment testWorkflowEnvironment;
-
-    @Autowired
     protected WorkflowClient workflowClient;
 
     protected PurchaseOrderWorkflow purchaseOrderWorkflow;
 
     @BeforeEach
-    void setUp() {
+    @Override
+    protected void setUp() {
+        super.setUp();
         this.applicationContext.start();
         this.purchaseOrderWorkflow = this.workflowClient.newWorkflowStub(PurchaseOrderWorkflow.class,
                 WorkflowOptions.newBuilder()
