@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @ServiceImpl(service = PaymentNexusService.class)
-@NexusServiceImpl(taskQueues = PaymentNexusService.TASK_QUEUE)
+@NexusServiceImpl(taskQueues = "${app.temporal.task-queues.payment}")
 public class PaymentNexusApplicationService {
 
     private final PaymentApplicationService paymentApplicationService;

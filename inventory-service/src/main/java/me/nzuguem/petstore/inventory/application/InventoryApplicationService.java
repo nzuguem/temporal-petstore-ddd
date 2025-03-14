@@ -11,11 +11,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
-@ActivityImpl(taskQueues = InventoryActivities.TASK_QUEUE)
+@ActivityImpl(taskQueues = "${app.temporal.task-queues.inventory}")
 public class InventoryApplicationService implements InventoryActivities {
 
     private AtomicInteger stock = new AtomicInteger(20);
-
 
     @Override
     public void checkInventory(CheckInventoryRequest request) {
@@ -28,7 +27,7 @@ public class InventoryApplicationService implements InventoryActivities {
             if (stock.get() < product.quantity()) {
                 throw new OutOfStockException("Items are out of stock");
             }
-            stock.set(stock.get() - product.quantity());
+            this.stock.set(stock.get() - product.quantity());
         }
 
         log.info("All {} products are in stock", products.size());

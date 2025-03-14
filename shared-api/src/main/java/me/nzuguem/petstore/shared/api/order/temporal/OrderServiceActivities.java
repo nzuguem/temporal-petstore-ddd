@@ -8,9 +8,6 @@ import me.nzuguem.petstore.shared.api.order.models.MarkOrderFailedRequest;
 
 @ActivityInterface
 public interface OrderServiceActivities {
-
-    String TASK_QUEUE = "order-tasks";
-
     CreateOrderResponse createOrder(CreateOrderRequest request);
     void markOrderAsComplete(MarkOrderCompleteRequest request);
     void markOrderAsFailed(MarkOrderFailedRequest request);

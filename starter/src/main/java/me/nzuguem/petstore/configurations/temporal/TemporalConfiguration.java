@@ -5,14 +5,7 @@ import io.temporal.common.converter.CodecDataConverter;
 import io.temporal.common.converter.DataConverter;
 import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.spring.boot.TemporalOptionsCustomizer;
-import io.temporal.spring.boot.WorkerOptionsCustomizer;
 import me.nzuguem.petstore.configurations.temporal.codecs.IdentityCodec;
-import me.nzuguem.petstore.shared.api.inventory.temporal.InventoryActivities;
-import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
-import me.nzuguem.petstore.shared.api.workflow.temporal.PurchaseOrderWorkflow;
-import me.nzuguem.petstore.shared.api.order.temporal.OrderServiceActivities;
-import me.nzuguem.petstore.shared.api.payment.temporal.PaymentActivities;
-import me.nzuguem.petstore.shared.api.shipment.temporal.ShipperActivities;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,23 +31,6 @@ public class TemporalConfiguration {
 
                 return optionsBuilder;
             }
-        };
-    }
-
-    @Bean
-    public WorkerOptionsCustomizer customWorkerOptions() {
-        return (optionsBuilder, workerName, taskQueue) -> {
-
-            switch (taskQueue) {
-                case PurchaseOrderWorkflow.TASK_QUEUE -> optionsBuilder.setIdentity(PurchaseOrderWorkflow.TASK_QUEUE + "-worker");
-                case OrderServiceActivities.TASK_QUEUE -> optionsBuilder.setIdentity(OrderServiceActivities.TASK_QUEUE + "-worker");
-                case OrderNotificationActivities.TASK_QUEUE -> optionsBuilder.setIdentity(OrderNotificationActivities.TASK_QUEUE + "-worker");
-                case InventoryActivities.TASK_QUEUE -> optionsBuilder.setIdentity(InventoryActivities.TASK_QUEUE + "-worker");
-                case PaymentActivities.TASK_QUEUE -> optionsBuilder.setIdentity(PaymentActivities.TASK_QUEUE + "-worker");
-                case ShipperActivities.TASK_QUEUE -> optionsBuilder.setIdentity(ShipperActivities.TASK_QUEUE + "-worker");
-            }
-
-            return optionsBuilder;
         };
     }
 

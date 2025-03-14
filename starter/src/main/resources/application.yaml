@@ -3,17 +3,43 @@ spring:
     name: petstore
   temporal:
     start-workers: true
-    namespace: ${namespace:default}
+    namespace: ${app.temporal.namespace}
     connection:
-      target: ${target:127.0.0.1:7233}
-      apiKey: ${api_key:}
+      target: ${app.temporal.target}
+      apiKey: ${app.temporal.apiKey}
     workflow-cache:
       using-virtual-workflow-threads: true
     workersAutoDiscovery:
-      packages: me.nzuguem.petstore
+      packages:
+      - me.nzuguem.petstore.inventory
+      - me.nzuguem.petstore.order
+      - me.nzuguem.petstore.notification
+      - me.nzuguem.petstore.payment
+      - me.nzuguem.petstore.workflow
+      - me.nzuguem.petstore.shipment
     workers:
-    - task-queue: purchase-order-tasks
-      name: purchase-order-tasks-worker
+    - task-queue: ${app.temporal.task-queues.purchase-order}
+      name: ${app.temporal.task-queues.purchase-order}-worker
+      virtual-thread:
+        using-virtual-threads: true
+    - task-queue: ${app.temporal.task-queues.order}
+      name: ${app.temporal.task-queues.order}-worker
+      virtual-thread:
+        using-virtual-threads: true
+    - task-queue: ${app.temporal.task-queues.notification}
+      name: ${app.temporal.task-queues.notification}-worker
+      virtual-thread:
+        using-virtual-threads: true
+    - task-queue: ${app.temporal.task-queues.inventory}
+      name: ${app.temporal.task-queues.inventory}-worker
+      virtual-thread:
+        using-virtual-threads: true
+    - task-queue: ${app.temporal.task-queues.payment}
+      name: ${app.temporal.task-queues.payment}-worker
+      virtual-thread:
+        using-virtual-threads: true
+    - task-queue: ${app.temporal.task-queues.shipment}
+      name: ${app.temporal.task-queues.shipment}-worker
       virtual-thread:
         using-virtual-threads: true
 
@@ -45,3 +71,17 @@ management:
 app:
   symmetric-codec:
     key: ${codec_key:Bp%qO*uf69ULbcfM}
+  temporal:
+    namespace: default
+    target: 127.0.0.1:7233
+    task-queues:
+      prefix: ""
+      purchase-order: ${app.temporal.task-queues.prefix}purchase-order-tasks
+      order: ${app.temporal.task-queues.prefix}order-tasks
+      notification: ${app.temporal.task-queues.prefix}notification-tasks
+      inventory: ${app.temporal.task-queues.prefix}inventory-tasks
+      payment: ${app.temporal.task-queues.prefix}payment-tasks
+      shipment: ${app.temporal.task-queues.prefix}shipment-tasks
+    nexus-endpoints:
+      prefix: ""
+      payment: ${app.temporal.nexus-endpoints.prefix}payment

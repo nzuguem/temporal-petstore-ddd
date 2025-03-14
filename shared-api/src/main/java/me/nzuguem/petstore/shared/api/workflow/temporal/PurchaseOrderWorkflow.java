@@ -7,9 +7,6 @@ import me.nzuguem.petstore.shared.api.workflow.models.PurchaseOrderContext;
 
 @WorkflowInterface
 public interface PurchaseOrderWorkflow {
-
-    String TASK_QUEUE = "purchase-order-tasks";
-
     @WorkflowMethod(name = "placeOrder")
     void placeOrder(PurchaseOrderContext ctx);
 }

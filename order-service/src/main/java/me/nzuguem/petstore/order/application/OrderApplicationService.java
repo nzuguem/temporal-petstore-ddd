@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@ActivityImpl(taskQueues = OrderServiceActivities.TASK_QUEUE)
+@ActivityImpl(taskQueues = "${app.temporal.task-queues.order}")
 public class OrderApplicationService implements OrderServiceActivities {
 
     @Override

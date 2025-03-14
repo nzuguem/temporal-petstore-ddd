@@ -7,9 +7,6 @@ import me.nzuguem.petstore.shared.api.notification.models.OrderSuccessEmailNotif
 
 @ActivityInterface
 public interface OrderNotificationActivities {
-
-    String TASK_QUEUE = "notification-tasks";
-
     void sendOrderReceivedEmail(OrderReceivedEmailNotificationRequest request);
     void sendOrderSuccessEmail(OrderSuccessEmailNotificationRequest request);
     void sendOrderErrorEmail(OrderErrorEmailNotificationRequest request);

@@ -5,8 +5,5 @@ import me.nzuguem.petstore.shared.api.shipment.models.CreateTrackingNumberReques
 
 @ActivityInterface
 public interface ShipperActivities {
-
-    String TASK_QUEUE = "shipment-tasks";
-
     String createTrackingNumber(CreateTrackingNumberRequest request);
 }

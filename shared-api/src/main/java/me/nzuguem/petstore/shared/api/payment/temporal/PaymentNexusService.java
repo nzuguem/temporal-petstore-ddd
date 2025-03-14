@@ -10,8 +10,6 @@ import me.nzuguem.petstore.shared.api.payment.models.ReverseActionsForTransactio
 public interface PaymentNexusService {
 
     String SERVICE_NAME = "payment-service";
-    String TASK_QUEUE = "payment-tasks";
-    String ENDPOINT = "payment";
 
     @Operation
     DebitCreditCardResponse debitCreditCard(DebitCreditCardRequest request);

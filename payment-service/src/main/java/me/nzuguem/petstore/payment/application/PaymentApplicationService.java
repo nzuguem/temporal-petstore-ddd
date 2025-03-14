@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@ActivityImpl(taskQueues = PaymentActivities.TASK_QUEUE)
+@ActivityImpl(taskQueues = "${app.temporal.task-queues.payment}")
 public class PaymentApplicationService implements PaymentActivities {
 
     private final PaymentService paymentService;

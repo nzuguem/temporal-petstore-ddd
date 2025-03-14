@@ -3,6 +3,7 @@ package me.nzuguem.petstore;
 import io.temporal.api.nexus.v1.Endpoint;
 import io.temporal.testing.TestWorkflowEnvironment;
 import me.nzuguem.petstore.configurations.DevServicesConfiguration;
+import me.nzuguem.petstore.shared.api.configurations.ApplicationContextProvider;
 import me.nzuguem.petstore.shared.api.order.models.CreditCardInfo;
 import me.nzuguem.petstore.shared.api.order.models.Product;
 import me.nzuguem.petstore.shared.api.payment.models.PaymentType;
@@ -60,8 +61,8 @@ public abstract class BaseE2ETests {
 
     protected void setUp() {
         this.paymentNexusEndpoint = this.testWorkflowEnvironment.createNexusEndpoint(
-                PaymentNexusService.ENDPOINT,
-                PaymentNexusService.TASK_QUEUE);
+                ApplicationContextProvider.getTemporalNexusEndpoints().payment(),
+                ApplicationContextProvider.getTemporalQueues().payment());
     }
 
     @AfterEach

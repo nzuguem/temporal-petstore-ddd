@@ -7,9 +7,6 @@ import me.nzuguem.petstore.shared.api.payment.models.ReverseActionsForTransactio
 
 @ActivityInterface
 public interface PaymentActivities {
-
-    String TASK_QUEUE = "payment-tasks";
-
     DebitCreditCardResponse debitCreditCard(DebitCreditCardRequest request);
     void reversePaymentTransactions(ReverseActionsForTransactionRequest request);
 }

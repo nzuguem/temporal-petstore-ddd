@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.nzuguem.petstore.configurations.filters.RequestIdFilters;
 import me.nzuguem.petstore.controllers.dto.OrderPurchaseRequest;
 import me.nzuguem.petstore.controllers.dto.WorkflowInitiationResponse;
+import me.nzuguem.petstore.shared.api.configurations.ApplicationContextProvider;
 import me.nzuguem.petstore.shared.api.workflow.models.PurchaseOrderContext;
 import me.nzuguem.petstore.shared.api.workflow.temporal.PurchaseOrderWorkflow;
 import org.slf4j.MDC;
@@ -42,7 +43,9 @@ public class PurchaseOrderController {
             var workflow = client.newWorkflowStub(PurchaseOrderWorkflow.class,
                     WorkflowOptions.newBuilder()
                             .setWorkflowId("OrderPurchase-" + requestId)
-                            .setTaskQueue(PurchaseOrderWorkflow.TASK_QUEUE).build());
+                            .setTaskQueue(ApplicationContextProvider.getTemporalQueues().purchaseOrder())
+                            .build()
+            );
 
             // Create the context
             var ctx = PurchaseOrderContext.builder()

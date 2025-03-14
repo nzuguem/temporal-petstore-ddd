@@ -9,6 +9,7 @@ import io.temporal.workflow.NexusServiceOptions;
 import io.temporal.workflow.Workflow;
 import jakarta.validation.ConstraintViolationException;
 import lombok.experimental.UtilityClass;
+import me.nzuguem.petstore.shared.api.configurations.ApplicationContextProvider;
 import me.nzuguem.petstore.shared.api.inventory.exceptions.OutOfStockException;
 import me.nzuguem.petstore.shared.api.inventory.temporal.InventoryActivities;
 import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
@@ -46,7 +47,7 @@ public class ActivitiesAndNexusProvider {
 
     public static OrderServiceActivities getOrderServiceActivities() {
         var newOptions = ActivityOptions.newBuilder(options)
-                .setTaskQueue(OrderServiceActivities.TASK_QUEUE)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().order())
                 .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                 .build();
 
@@ -55,7 +56,7 @@ public class ActivitiesAndNexusProvider {
 
     public static OrderNotificationActivities getOrderNotificationActivities() {
         var newOptions = ActivityOptions.newBuilder(options)
-                .setTaskQueue(OrderNotificationActivities.TASK_QUEUE)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().notification())
                 .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                 .build();
 
@@ -64,7 +65,7 @@ public class ActivitiesAndNexusProvider {
 
     public static PaymentActivities getPaymentActivities() {
         var newOptions = ActivityOptions.newBuilder(options)
-                .setTaskQueue(PaymentActivities.TASK_QUEUE)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().payment())
                 .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                 .build();
 
@@ -73,7 +74,7 @@ public class ActivitiesAndNexusProvider {
 
     public static InventoryActivities getInventoryActivities() {
         var newOptions = ActivityOptions.newBuilder(options)
-                .setTaskQueue(InventoryActivities.TASK_QUEUE)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().inventory())
                 .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                 .build();
 
@@ -82,7 +83,7 @@ public class ActivitiesAndNexusProvider {
 
     public static ShipperActivities getShipperActivities() {
         ActivityOptions newOptions = ActivityOptions.newBuilder(options)
-                .setTaskQueue(ShipperActivities.TASK_QUEUE)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().shipment())
                 .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                 .build();
 
@@ -93,7 +94,7 @@ public class ActivitiesAndNexusProvider {
         return Workflow.newNexusServiceStub(
                 PaymentNexusService.class,
                 NexusServiceOptions.newBuilder()
-                        .setEndpoint(PaymentNexusService.ENDPOINT)
+                        .setEndpoint(ApplicationContextProvider.getTemporalNexusEndpoints().payment())
                         .setOperationOptions(
                             NexusOperationOptions.newBuilder()
                                     .setScheduleToCloseTimeout(Duration.ofSeconds(30))

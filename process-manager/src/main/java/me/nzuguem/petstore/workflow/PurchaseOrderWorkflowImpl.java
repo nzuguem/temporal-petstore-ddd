@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import java.util.Objects;
 import java.util.UUID;
 
-@WorkflowImpl(taskQueues = PurchaseOrderWorkflow.TASK_QUEUE)
+@WorkflowImpl(taskQueues = "${app.temporal.task-queues.purchase-order}")
 public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
 
     private static final Logger log = Workflow.getLogger(PurchaseOrderWorkflowImpl.class);

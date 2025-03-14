@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@ActivityImpl(taskQueues = ShipperActivities.TASK_QUEUE)
+@ActivityImpl(taskQueues = "${app.temporal.task-queues.shipment}")
 public class ShipmentApplicationService implements ShipperActivities {
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-@ActivityImpl(taskQueues = OrderNotificationActivities.TASK_QUEUE)
+@ActivityImpl(taskQueues = "${app.temporal.task-queues.notification}")
 public class NotificationApplicationService implements OrderNotificationActivities {
 
     private final EmailOperations emailOperations;
