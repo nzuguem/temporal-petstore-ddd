@@ -6,7 +6,7 @@ spring:
     namespace: ${app.temporal.namespace}
     connection:
       target: ${app.temporal.target}
-      apiKey: ${app.temporal.apiKey}
+      apiKey: ${app.temporal.apiKey:}
     workflow-cache:
       using-virtual-workflow-threads: true
     workersAutoDiscovery:
@@ -22,26 +22,56 @@ spring:
       name: ${app.temporal.task-queues.purchase-order}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
     - task-queue: ${app.temporal.task-queues.order}
       name: ${app.temporal.task-queues.order}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
     - task-queue: ${app.temporal.task-queues.notification}
       name: ${app.temporal.task-queues.notification}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
     - task-queue: ${app.temporal.task-queues.inventory}
       name: ${app.temporal.task-queues.inventory}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
     - task-queue: ${app.temporal.task-queues.payment}
       name: ${app.temporal.task-queues.payment}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
     - task-queue: ${app.temporal.task-queues.shipment}
       name: ${app.temporal.task-queues.shipment}-worker
       virtual-thread:
         using-virtual-threads: true
+      deployment-properties:
+        use-versioning: ${app.temporal.use-worker-versioning}
+        deployment-name: ${TEMPORAL_DEPLOYMENT_NAME:${spring.application.name}}
+        build-id: ${TEMPORAL_WORKER_BUILD_ID:404}
+        default-versioning-behavior: ${app.temporal.default-worker-versioning-behavior}
 
 ## OpenTelemetry
 ### https://github.com/spring-projects/spring-boot/issues/41460#issuecomment-2399968462
@@ -72,8 +102,10 @@ app:
   symmetric-codec:
     key: ${codec_key:Bp%qO*uf69ULbcfM}
   temporal:
-    namespace: default
-    target: 127.0.0.1:7233
+    namespace: ${TEMPORAL_NAMESPACE:default} # TEMPORAL_NAMESPACE come from K8s Temporal Worker Controller
+    target: ${TEMPORAL_ADDRESS:127.0.0.1:7233} # TEMPORAL_ADDRESS come from K8s Temporal Worker Controller
+    use-worker-versioning: true
+    default-worker-versioning-behavior: PINNED
     task-queues:
       prefix: ""
       purchase-order: ${app.temporal.task-queues.prefix}purchase-order-tasks

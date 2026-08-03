@@ -1,0 +1,5 @@
+resources:
+  - connection.yml
+  - route.yml
+  - service.yml
+  - workerdeployment.yml

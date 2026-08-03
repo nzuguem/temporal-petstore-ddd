@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Configuration
@@ -21,23 +20,18 @@ public class TemporalConfiguration {
             MDCContextPropagator mdcContextPropagator
     ) {
 
-        return new TemporalOptionsCustomizer<>() {
+        return optionsBuilder -> {
 
-            @Override
-            public WorkflowClientOptions.Builder customize(
-                    WorkflowClientOptions.Builder optionsBuilder) {
+            optionsBuilder.setContextPropagators(List.of(mdcContextPropagator));
 
-                optionsBuilder.setContextPropagators(List.of(mdcContextPropagator));
-
-                return optionsBuilder;
-            }
+            return optionsBuilder;
         };
     }
 
     @Bean
     public DataConverter corporateDataConverter(
             @Value("${app.symmetric-codec.key}") String symmetricCodecKey
-    ) throws GeneralSecurityException {
+    ) {
         return new CodecDataConverter(
                 DefaultDataConverter.newDefaultInstance(),
                 List.of(new IdentityCodec()), true);

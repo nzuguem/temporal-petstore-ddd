@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>starter</artifactId>
     <name>starter</name>
-    <version>1.0.0</version>
     <description>Starter</description>
 
     <dependencies>

@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>process-manager</artifactId>
     <name>process-manager</name>
-    <version>1.0.0</version>
     <description>Process Manager</description>
 
     <dependencies>

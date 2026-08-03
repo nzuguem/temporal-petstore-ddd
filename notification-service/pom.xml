@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>notification-service</artifactId>
     <name>notification-service</name>
-    <version>1.0.0</version>
     <description>Notification Service</description>
 
     <dependencies>

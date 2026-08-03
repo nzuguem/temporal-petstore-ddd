@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>shipment-service</artifactId>
     <name>shipment-service</name>
-    <version>1.0.0</version>
     <description>Shipment Service</description>
 
     <dependencies>

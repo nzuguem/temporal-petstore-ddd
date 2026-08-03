@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>payment-service</artifactId>
     <name>payement-service</name>
-    <version>1.0.0</version>
     <description>Payement Service</description>
 
     <dependencies>

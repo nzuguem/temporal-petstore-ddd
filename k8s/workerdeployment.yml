@@ -1,0 +1,28 @@
+apiVersion: temporal.io/v1alpha1
+kind: WorkerDeployment
+metadata:
+  name: petstore-worker
+spec:
+  workerOptions:
+    connectionRef:
+      name: temporal
+    temporalNamespace: default
+  rollout:
+    strategy: AllAtOnce
+    # strategy: Progressive
+    # steps:
+    #   - rampPercentage: 25
+    #     pauseDuration: 2m
+    #   - rampPercentage: 75
+    #     pauseDuration: 3m
+  sunset:
+    scaledownDelay: 15m   # Quick scaledown
+    deleteDelay: 2h       # Minimal retention
+  template:
+    metadata:
+      labels:
+        app: petstore-worker
+    spec:
+      containers:
+        - name: petstore-worker
+          image: localhost:5001/petstore-worker

@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>shared-api</artifactId>
     <name>shared-api</name>
-    <version>1.0.0</version>
     <description>Shared API</description>
 
     <dependencies>

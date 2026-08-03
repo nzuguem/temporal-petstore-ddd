@@ -9,10 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>me.nzuguem</groupId>
     <artifactId>inventory-service</artifactId>
     <name>inventory-service</name>
-    <version>1.0.0</version>
     <description>Inventory Service</description>
 
     <dependencies>

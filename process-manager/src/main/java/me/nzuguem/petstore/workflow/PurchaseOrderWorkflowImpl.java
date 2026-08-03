@@ -20,6 +20,7 @@ import me.nzuguem.petstore.shared.api.payment.temporal.PaymentActivities;
 import me.nzuguem.petstore.shared.api.shipment.temporal.ShipperActivities;
 import org.slf4j.Logger;
 
+import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -45,21 +46,27 @@ public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
 
         try {
             // 1. Send the acknowledgement of the order request
+            Workflow.sleep(Duration.ofSeconds(15));
             this.sendOrderReceivedEmail(ctx);
 
             // 2. Create the initial order record
+            Workflow.sleep(Duration.ofSeconds(15));
             ctx = this.generateProductOrder(ctx);
 
             // 3. Charge the credit card
+            Workflow.sleep(Duration.ofSeconds(30));
             this.debitCreditCard(saga, ctx);
 
             // 4. Check with warehouse to see if the products are in stock - fail if not
+            Workflow.sleep(Duration.ofSeconds(30));
             this.inventoryActivities.checkInventory(ctx.toCheckInventoryRequest());
 
             // 5. get the shipping information/tracking number from the shipper
+            Workflow.sleep(Duration.ofSeconds(60));
             ctx = this.createTrackingNumber(ctx);
 
             // 6. Save order history and send out email
+            Workflow.sleep(Duration.ofSeconds(60));
             this.completeOrder(ctx);
 
         } catch (TemporalFailure failure) {
