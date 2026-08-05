@@ -80,32 +80,46 @@ management:
     web:
       exposure:
         include: prometheus
-  opentelemetry:
-    resource-attributes:
-      application: ${spring.application.name}
   tracing:
     sampling:
       probability: 1.0
+    export:
+      otlp:
+        enabled: true
   otlp:
-    tracing:
-      endpoint: http://localhost:4317/v1/traces
+    metrics:
       export:
         enabled: true
-      transport: grpc
+        url: ${app.observability.otel-base-url}/v1/metrics
+  logging:
+    export:
+      otlp:
+        enabled: false
+  opentelemetry:
+    enabled: true
     logging:
       export:
-        enabled: false
-      transport: grpc
-      endpoint: http://localhost:4317/v1/logs
+        otlp:
+          endpoint: ${app.observability.otel-base-url}/v1/logs
+          transport: http
+    tracing:
+      export:
+        otlp:
+          endpoint: ${app.observability.otel-base-url}/v1/traces
+          transport: http
 
 app:
   symmetric-codec:
     key: ${codec_key:Bp%qO*uf69ULbcfM}
+  observability:
+    otel-base-url: http://localhost:4318
+  deploy:
+    version: "provided-by-ci"
   temporal:
     namespace: ${TEMPORAL_NAMESPACE:default} # TEMPORAL_NAMESPACE come from K8s Temporal Worker Controller
     target: ${TEMPORAL_ADDRESS:127.0.0.1:7233} # TEMPORAL_ADDRESS come from K8s Temporal Worker Controller
-    use-worker-versioning: true
-    default-worker-versioning-behavior: PINNED
+    use-worker-versioning: false
+    default-worker-versioning-behavior: UNSPECIFIED
     task-queues:
       prefix: ""
       purchase-order: ${app.temporal.task-queues.prefix}purchase-order-tasks

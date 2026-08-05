@@ -26,3 +26,6 @@ spec:
       containers:
         - name: petstore-worker
           image: localhost:5001/petstore-worker
+          envFrom:
+          - configMapRef:
+              name: petstore-worker

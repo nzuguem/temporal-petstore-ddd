@@ -47,16 +47,24 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
         </dependency>
+        <!-- It is included in the OpenTelemetry Starter with a runtime scope, but we need a few classes with a compile-time scope. So I’m adding it here  -->
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
         </dependency>
+        <!-- This module provides OpenTelemetry integration helpers for Temporal Java SDK workers. -->
+        <!-- https://github.com/temporalio/sdk-java/tree/main/contrib/temporal-opentelemetry -->
+        <dependency>
+            <groupId>io.temporal</groupId>
+            <artifactId>temporal-opentelemetry</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+            <version>2.30.0-alpha</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

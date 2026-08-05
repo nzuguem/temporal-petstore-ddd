@@ -3,6 +3,8 @@ package me.nzuguem.petstore.controllers;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.common.SearchAttributeKey;
+import io.temporal.common.SearchAttributes;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import me.nzuguem.petstore.configurations.filters.RequestIdFilters;
@@ -44,6 +46,11 @@ public class PurchaseOrderController {
                     WorkflowOptions.newBuilder()
                             .setWorkflowId("OrderPurchase-" + requestId)
                             .setTaskQueue(ApplicationContextProvider.getTemporalQueues().purchaseOrder())
+                            .setTypedSearchAttributes(
+                                    SearchAttributes.newBuilder()
+                                            .set(SearchAttributeKey.forKeyword("AppVersion"), ApplicationContextProvider.getApplicationVersion())
+                                            .build()
+                            )
                             .build()
             );
 

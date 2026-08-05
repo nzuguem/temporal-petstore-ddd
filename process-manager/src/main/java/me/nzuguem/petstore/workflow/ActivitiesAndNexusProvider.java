@@ -1,6 +1,5 @@
 package me.nzuguem.petstore.workflow;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import io.temporal.activity.ActivityCancellationType;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
@@ -15,6 +14,7 @@ import me.nzuguem.petstore.shared.api.inventory.temporal.InventoryActivities;
 import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
 import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.exceptions.PurchasingException;
+import tools.jackson.databind.DatabindException;
 import me.nzuguem.petstore.shared.api.order.temporal.OrderServiceActivities;
 import me.nzuguem.petstore.shared.api.payment.exceptions.BadPaymentInfoException;
 import me.nzuguem.petstore.shared.api.payment.exceptions.PaymentDeclinedException;
@@ -26,12 +26,12 @@ import java.time.Duration;
 @UtilityClass
 public class ActivitiesAndNexusProvider {
 
-    private final static ActivityOptions options = ActivityOptions.newBuilder()
+    private static final ActivityOptions options = ActivityOptions.newBuilder()
             .setStartToCloseTimeout(Duration.ofSeconds(30))
             .setRetryOptions(RetryOptions.newBuilder()
                     .setDoNotRetry(
                             BadPaymentInfoException.class.getName(),
-                            JsonMappingException.class.getName(),
+                            DatabindException.class.getName(),
                             ConstraintViolationException.class.getName(),
                             NullPointerException.class.getName(),
                             OutOfStockException.class.getName(),

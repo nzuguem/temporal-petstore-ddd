@@ -30,4 +30,8 @@ public class ApplicationContextProvider implements ApplicationContextAware {
     public static TemporalCustomProperties.NexusEndpoints getTemporalNexusEndpoints() {
         return ApplicationContextProvider.getBean(TemporalCustomProperties.class).nexusEndpoints();
     }
+
+    public static String getApplicationVersion() {
+        return ApplicationContextProvider.context.getEnvironment().getProperty("app.deploy.version");
+    }
 }

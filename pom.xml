@@ -6,8 +6,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>4.1.0</version>
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
 
     <groupId>me.nzuguem</groupId>
@@ -29,7 +30,7 @@
     </modules>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <temporal.version>1.37.0</temporal.version>
         <lombok.version>1.18.46</lombok.version>
         <arhunit.version>1.4.0</arhunit.version>
@@ -49,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -109,10 +110,9 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>1.21.4</version>
             </dependency>
             <dependency>
                 <groupId>com.tngtech.archunit</groupId>
@@ -126,10 +126,15 @@
                 <version>${otel.logback-appender.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.temporal</groupId>
+                <artifactId>temporal-opentelemetry</artifactId>
+                <version>${temporal.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
                 <groupId>io.rest-assured</groupId>
                 <artifactId>rest-assured</artifactId>
-                <version>${rest-assured.version}</version>
-                <scope>test</scope>
+                <version>5.5.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -150,5 +155,21 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

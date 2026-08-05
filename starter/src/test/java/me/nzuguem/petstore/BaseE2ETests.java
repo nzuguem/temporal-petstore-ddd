@@ -1,18 +1,14 @@
 package me.nzuguem.petstore;
 
-import io.temporal.api.nexus.v1.Endpoint;
+import io.temporal.api.enums.v1.IndexedValueType;
 import io.temporal.testing.TestWorkflowEnvironment;
 import me.nzuguem.petstore.configurations.DevServicesConfiguration;
 import me.nzuguem.petstore.shared.api.configurations.ApplicationContextProvider;
 import me.nzuguem.petstore.shared.api.order.models.CreditCardInfo;
 import me.nzuguem.petstore.shared.api.order.models.Product;
 import me.nzuguem.petstore.shared.api.payment.models.PaymentType;
-import me.nzuguem.petstore.shared.api.payment.temporal.PaymentNexusService;
 import me.nzuguem.petstore.shared.api.workflow.models.PurchaseOrderContext;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -33,8 +29,6 @@ public abstract class BaseE2ETests {
 
     @Autowired
     protected TestWorkflowEnvironment testWorkflowEnvironment;
-
-    private Endpoint paymentNexusEndpoint;
 
     protected static final PurchaseOrderContext BASE_CTX = PurchaseOrderContext.builder()
             .transactionId(UUID.randomUUID())
@@ -59,14 +53,15 @@ public abstract class BaseE2ETests {
             .requestedByUser("anonymous")
             .build();
 
-    protected void setUp() {
-        this.paymentNexusEndpoint = this.testWorkflowEnvironment.createNexusEndpoint(
+    @BeforeAll
+    protected void beforeAll() {
+        this.testWorkflowEnvironment.createNexusEndpoint(
                 ApplicationContextProvider.getTemporalNexusEndpoints().payment(),
                 ApplicationContextProvider.getTemporalQueues().payment());
+
+        this.testWorkflowEnvironment.registerSearchAttribute("AppVersion", IndexedValueType.INDEXED_VALUE_TYPE_KEYWORD);
     }
 
-    @AfterEach
-    protected void tearDown() {
-        this.testWorkflowEnvironment.deleteNexusEndpoint(this.paymentNexusEndpoint);
+    protected void setUp() {
     }
 }

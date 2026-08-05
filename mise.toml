@@ -3,12 +3,22 @@ java = "temurin-25.0.2+10.0.LTS"
 maven = "3.9.15"
 
 [tasks."release+deploy"]
-usage = 'arg "[environment]" env="VERSION"'
+usage = 'arg "<version>" env="VERSION"'
 run = '''
 mvn clean install -DskipTests
-docker build -t localhost:5001/petstore-worker:${usage_environment:-} . --push
+
+docker build --build-arg APP_DEPLOY_VERSION=${usage_version:-} -t localhost:5001/petstore-worker:${usage_version:-} . --push
+
 cd ./k8s
-  kustomize edit set image localhost:5001/petstore-worker=localhost:5001/petstore-worker:${usage_environment:-}
+  kustomize edit set image localhost:5001/petstore-worker=localhost:5001/petstore-worker:${usage_version:-}
 cd ..
+
+temporal operator search-attribute create --namespace default \
+    --name="AppVersion" --type="Keyword"
+temporal operator nexus endpoint create \
+  --name payment \
+  --target-namespace default \
+  --target-task-queue payment-tasks || true
+
 kubectl apply -k ./k8s
 '''

@@ -7,7 +7,9 @@ import io.temporal.payload.codec.PayloadCodec;
 import io.temporal.payload.codec.PayloadCodecException;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -31,11 +33,13 @@ public class SymmetricEncryptionCodec implements PayloadCodec {
     }
 
     @Override
+    @NonNull
     public List<Payload> encode(List<Payload> payloads) {
         return payloads.stream().map(this::encodePayload).toList();
     }
 
     @Override
+    @NonNull
     public List<Payload> decode(@Nonnull List<Payload> payloads) {
         return payloads.stream().map(this::decodePayload).toList();
     }

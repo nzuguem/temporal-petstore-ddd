@@ -3,3 +3,11 @@ resources:
   - route.yml
   - service.yml
   - workerdeployment.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: petstore-worker
+    envs:
+      - config.env
