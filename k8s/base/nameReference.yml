@@ -1,0 +1,9 @@
+# Kustomize does not know the temporal.io CRDs, so the generated ConfigMap hash
+# suffix would not reach the WorkerDeployment pod template without this.
+nameReference:
+  - kind: ConfigMap
+    version: v1
+    fieldSpecs:
+      - kind: WorkerDeployment
+        group: temporal.io
+        path: spec/template/spec/containers/envFrom/configMapRef/name

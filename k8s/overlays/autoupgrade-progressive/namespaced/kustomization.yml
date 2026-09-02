@@ -1,0 +1,10 @@
+# The variant name is spelled out here once; everything else is derived from it
+# by the `variant` component applied one level up.
+namespace: autoupgrade-progressive
+
+resources:
+  - ../../../base
+
+components:
+  - ../../../components/autoupgrade
+  - ../../../components/progressive

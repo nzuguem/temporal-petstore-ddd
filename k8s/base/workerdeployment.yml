@@ -6,15 +6,9 @@ spec:
   workerOptions:
     connectionRef:
       name: temporal
-    temporalNamespace: default
+    temporalNamespace: variant
   rollout:
     strategy: AllAtOnce
-    # strategy: Progressive
-    # steps:
-    #   - rampPercentage: 25
-    #     pauseDuration: 2m
-    #   - rampPercentage: 75
-    #     pauseDuration: 3m
   sunset:
     scaledownDelay: 15m   # Quick scaledown
     deleteDelay: 2h       # Minimal retention

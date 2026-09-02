@@ -1,0 +1,8 @@
+# Applies the variant-derived values (Temporal namespace, route path, Nexus
+# prefix) on top of the already-namespaced resources below.
+# Also the target of `kustomize edit set image` during deploy.
+resources:
+  - ./namespaced
+
+components:
+  - ../../components/variant
