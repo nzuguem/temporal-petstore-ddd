@@ -49,8 +49,17 @@ public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
             Workflow.sleep(Duration.ofSeconds(15));
             this.sendOrderReceivedEmail(ctx);
 
+            // DEMO - Changement cassant
+            // this.sendOrderReceivedEmail(ctx);
+
+            // DEMO - Auto Upgrade Behavior/Patching API
+            // var version = Workflow.getVersion("sendOrderReceivedEmail", Workflow.DEFAULT_VERSION, 1);
+            // if (version == 1) {
+            //     this.sendOrderReceivedEmail(ctx);
+            // }
+
             // 2. Create the initial order record
-            Workflow.sleep(Duration.ofSeconds(15));
+            Workflow.sleep(Duration.ofSeconds(30));
             ctx = this.generateProductOrder(ctx);
 
             // 3. Charge the credit card
@@ -58,7 +67,7 @@ public class PurchaseOrderWorkflowImpl implements PurchaseOrderWorkflow {
             this.debitCreditCard(saga, ctx);
 
             // 4. Check with warehouse to see if the products are in stock - fail if not
-            Workflow.sleep(Duration.ofSeconds(30));
+            Workflow.sleep(Duration.ofSeconds(60));
             this.inventoryActivities.checkInventory(ctx.toCheckInventoryRequest());
 
             // 5. get the shipping information/tracking number from the shipper

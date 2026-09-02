@@ -121,13 +121,12 @@ app:
     use-worker-versioning: false
     default-worker-versioning-behavior: UNSPECIFIED
     task-queues:
-      prefix: ""
-      purchase-order: ${app.temporal.task-queues.prefix}purchase-order-tasks
-      order: ${app.temporal.task-queues.prefix}order-tasks
-      notification: ${app.temporal.task-queues.prefix}notification-tasks
-      inventory: ${app.temporal.task-queues.prefix}inventory-tasks
-      payment: ${app.temporal.task-queues.prefix}payment-tasks
-      shipment: ${app.temporal.task-queues.prefix}shipment-tasks
+      purchase-order: purchase-order-tasks
+      order: order-tasks
+      notification: notification-tasks
+      inventory: inventory-tasks
+      payment: payment-tasks
+      shipment: shipment-tasks
     nexus-endpoints:
       prefix: ""
       payment: ${app.temporal.nexus-endpoints.prefix}payment

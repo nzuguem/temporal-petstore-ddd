@@ -1,13 +1,14 @@
 resources:
+  - namespace.yml
   - connection.yml
   - route.yml
   - service.yml
   - workerdeployment.yml
 
-generatorOptions:
-  disableNameSuffixHash: true
-
 configMapGenerator:
   - name: petstore-worker
     envs:
       - config.env
+
+configurations:
+  - nameReference.yml

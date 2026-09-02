@@ -1,0 +1,7 @@
+apiVersion: temporal.io/v1alpha1
+kind: WorkerDeployment
+metadata:
+  name: petstore-worker
+spec:
+  rollout:
+    strategy: AllAtOnce

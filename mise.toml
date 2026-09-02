@@ -3,22 +3,79 @@ java = "temurin-25.0.2+10.0.LTS"
 maven = "3.9.15"
 
 [tasks."release+deploy"]
-usage = 'arg "<version>" env="VERSION"'
+usage = '''
+flag "--version <version>" env="VERSION" help="🏷️ Delploy version"
+'''
 run = '''
 mvn clean install -DskipTests
 
 docker build --build-arg APP_DEPLOY_VERSION=${usage_version:-} -t localhost:5001/petstore-worker:${usage_version:-} . --push
 
-cd ./k8s
-  kustomize edit set image localhost:5001/petstore-worker=localhost:5001/petstore-worker:${usage_version:-}
-cd ..
+# Every variant is deployed on each run. The list is discovered from the
+# overlays, so adding one is just a matter of creating its directory.
+for overlay in ./k8s/overlays/*/; do
+  variant=$(basename "${overlay}")
 
-temporal operator search-attribute create --namespace default \
-    --name="AppVersion" --type="Keyword"
-temporal operator nexus endpoint create \
-  --name payment \
-  --target-namespace default \
-  --target-task-queue payment-tasks || true
+  echo "🚀 Deploying variant ${variant}"
 
-kubectl apply -k ./k8s
+  (cd "${overlay}" && kustomize edit set image localhost:5001/petstore-worker=localhost:5001/petstore-worker:${usage_version:-})
+
+  temporal operator namespace create --namespace "${variant}" || true
+
+  # Namespace creation is asynchronous, wait for it to become describable.
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    temporal operator namespace describe --namespace "${variant}" > /dev/null 2>&1 && break
+    sleep 2
+  done
+
+  temporal operator search-attribute create --namespace "${variant}" \
+      --name="AppVersion" --type="Keyword" || true
+
+  # Nexus endpoint names are cluster-global, hence the variant prefix. It matches
+  # APP_TEMPORAL_NEXUS_ENDPOINTS_PREFIX injected into the worker ConfigMap.
+  temporal operator nexus endpoint create \
+    --name "${variant}-payment" \
+    --target-namespace "${variant}" \
+    --target-task-queue payment-tasks || true
+
+  kubectl apply -k "${overlay}"
+done
+'''
+
+[tasks."start-workflow"]
+description = "🚀 Start a purchase order workflow on every variant at once"
+run = '''
+payload='{
+  "creditCard": {
+    "cardNumber": "4400123487650987",
+    "cardHolderName": "Homer Simpson",
+    "expiryDate": "12/25",
+    "cvv": "372",
+    "type": "VISA"
+  },
+  "customerEmail": "homer.simpson@springfield.gov",
+  "products": [
+    {
+      "sku": "DOG-COLLAR-001",
+      "quantity": 5,
+      "price": 19.99
+    }
+  ]
+}'
+
+# Each variant is exposed under its own path prefix, stripped by the HTTPRoute
+# URLRewrite filter before reaching the worker.
+for overlay in ./k8s/overlays/*/; do
+  variant=$(basename "${overlay}")
+
+  (
+    response=$(curl -sS -w '\n%{http_code}' -X POST \
+      "http://petstore-worker.127.0.0.1.nip.io:9080/${variant}" \
+      -H "Content-Type: application/json" \
+      -d "${payload}")
+    echo "🚀 ${variant} -> ${response}"
+  ) &
+done
+
+wait
 '''

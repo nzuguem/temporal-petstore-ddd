@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+# Derives every variant-specific value from the Namespace name, so each overlay
+# only ever spells the variant out once.
+#
+# This is applied from the *outer* overlay kustomization, on top of the nested
+# `namespaced/` one. Components run before their own kustomization's namespace
+# transformer, so sourcing the Namespace name only resolves once that transform
+# has already happened one level below.
+replacements:
+  - source:
+      kind: Namespace
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: WorkerDeployment
+        fieldPaths:
+          - spec.workerOptions.temporalNamespace
+      # Keeps the leading slash: `/variant` splits into ["", "variant"].
+      - select:
+          kind: HTTPRoute
+        fieldPaths:
+          - spec.rules.0.matches.0.path.value
+        options:
+          delimiter: /
+          index: 1
+      # Keeps the trailing dash: `variant-` splits into ["variant", ""].
+      - select:
+          kind: ConfigMap
+        fieldPaths:
+          - data.APP_TEMPORAL_NEXUS_ENDPOINTS_PREFIX
+        options:
+          delimiter: '-'
+          index: 0

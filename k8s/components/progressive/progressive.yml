@@ -1,0 +1,12 @@
+apiVersion: temporal.io/v1alpha1
+kind: WorkerDeployment
+metadata:
+  name: petstore-worker
+spec:
+  rollout:
+    strategy: Progressive
+    steps:
+      - rampPercentage: 25
+        pauseDuration: 2m
+      - rampPercentage: 75
+        pauseDuration: 3m
