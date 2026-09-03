@@ -10,6 +10,7 @@ import me.nzuguem.petstore.shared.api.notification.models.OrderSuccessEmailNotif
 import me.nzuguem.petstore.shared.api.notification.temporal.OrderNotificationActivities;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,12 @@ public class NotificationApplicationService implements OrderNotificationActiviti
                 .content("TODO")
                 .headers(Map.of("X-Tags", List.of("Purchase Order, Received")))
                 .build();
+
+        try {
+            Thread.sleep(Duration.ofSeconds(3));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         log.info("Sending order received email to {} with TX id {}}", request.customerEmail(),
                 request.transactionNumber());

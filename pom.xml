@@ -31,7 +31,7 @@
 
     <properties>
         <java.version>25</java.version>
-        <temporal.version>1.37.0</temporal.version>
+        <temporal.version>1.38.0</temporal.version>
         <lombok.version>1.18.46</lombok.version>
         <arhunit.version>1.4.0</arhunit.version>
         <otel.logback-appender.version>2.10.0-alpha</otel.logback-appender.version>

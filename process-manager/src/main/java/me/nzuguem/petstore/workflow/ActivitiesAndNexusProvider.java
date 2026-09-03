@@ -2,7 +2,12 @@ package me.nzuguem.petstore.workflow;
 
 import io.temporal.activity.ActivityCancellationType;
 import io.temporal.activity.ActivityOptions;
+import io.temporal.api.enums.v1.ActivityIdConflictPolicy;
+import io.temporal.api.enums.v1.ActivityIdReusePolicy;
+import io.temporal.client.StartActivityOptions;
 import io.temporal.common.RetryOptions;
+import io.temporal.common.SearchAttributeKey;
+import io.temporal.common.SearchAttributes;
 import io.temporal.workflow.NexusOperationOptions;
 import io.temporal.workflow.NexusServiceOptions;
 import io.temporal.workflow.Workflow;
@@ -102,6 +107,21 @@ public class ActivitiesAndNexusProvider {
                         )
                         .build()
         );
+    }
+
+    public static StartActivityOptions getBaseNotificationsStartActivityOptions(String activityId) {
+        return StartActivityOptions.newBuilder()
+                .setId(activityId)
+                .setTaskQueue(ApplicationContextProvider.getTemporalQueues().notification())
+                .setStartToCloseTimeout(Duration.ofSeconds(10))
+                .setIdReusePolicy(ActivityIdReusePolicy.ACTIVITY_ID_REUSE_POLICY_ALLOW_DUPLICATE)
+                .setIdConflictPolicy(ActivityIdConflictPolicy.ACTIVITY_ID_CONFLICT_POLICY_USE_EXISTING)
+                .setTypedSearchAttributes(
+                        SearchAttributes.newBuilder()
+                                .set(SearchAttributeKey.forKeyword("AppVersion"), ApplicationContextProvider.getApplicationVersion())
+                                .build()
+                )
+                .build();
     }
 
 }

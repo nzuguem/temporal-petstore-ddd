@@ -1,6 +1,9 @@
 spring:
   application:
     name: petstore
+  threads:
+    virtual:
+      enabled: true
   temporal:
     start-workers: true
     namespace: ${app.temporal.namespace}

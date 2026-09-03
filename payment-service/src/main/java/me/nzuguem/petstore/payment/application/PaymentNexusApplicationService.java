@@ -6,6 +6,7 @@ import io.nexusrpc.handler.ServiceImpl;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.spring.boot.NexusServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import me.nzuguem.petstore.shared.api.payment.exceptions.BadPaymentInfoException;
 import me.nzuguem.petstore.shared.api.payment.exceptions.PaymentDeclinedException;
 import me.nzuguem.petstore.shared.api.payment.models.DebitCreditCardRequest;
 import me.nzuguem.petstore.shared.api.payment.models.DebitCreditCardResponse;
@@ -30,14 +31,14 @@ public class PaymentNexusApplicationService {
     public OperationHandler<DebitCreditCardRequest, DebitCreditCardResponse> debitCreditCard() {
 
         return OperationHandler.sync(
-                (ctx, details, input) -> {
+                (_, _, input) -> {
                     try {
                         return  this.paymentApplicationService.debitCreditCard(input);
-                    } catch (PaymentDeclinedException paymentDeclinedException) {
+                    } catch (PaymentDeclinedException | BadPaymentInfoException paymentException) {
                         throw ApplicationFailure.newNonRetryableFailureWithCause(
-                                paymentDeclinedException.getMessage(),
-                                paymentDeclinedException.getClass().getSimpleName(),
-                                paymentDeclinedException);
+                                paymentException.getMessage(),
+                                paymentException.getClass().getSimpleName(),
+                                paymentException);
                     }
                 }
         );
@@ -47,7 +48,7 @@ public class PaymentNexusApplicationService {
     public OperationHandler<ReverseActionsForTransactionRequest, Void> reversePaymentTransactions() {
 
         return OperationHandler.sync(
-                (ctx, details, input) -> {
+                (_, _, input) -> {
                     this.paymentApplicationService.reversePaymentTransactions(input);
                     return null;
                 }

@@ -1,6 +1,9 @@
 package me.nzuguem.petstore.configurations.temporal;
 
 import io.opentelemetry.api.OpenTelemetry;
+import io.temporal.client.ActivityClient;
+import io.temporal.client.ActivityClientOptions;
+import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.common.converter.CodecDataConverter;
 import io.temporal.common.converter.DataConverter;
@@ -58,6 +61,18 @@ public class TemporalConfiguration {
         return new CodecDataConverter(
                 DefaultDataConverter.newDefaultInstance(),
                 List.of(new IdentityCodec()), true);
+    }
+
+    @Bean
+    public ActivityClient activityClient(WorkflowClient workflowClient, DataConverter corporateDataConverter) {
+        return ActivityClient.newInstance(
+                workflowClient.getWorkflowServiceStubs(),
+                ActivityClientOptions.newBuilder()
+                        .setNamespace(workflowClient.getOptions().getNamespace())
+                        .setContextPropagators(workflowClient.getOptions().getContextPropagators())
+                        .setDataConverter(corporateDataConverter)
+                        .build()
+        );
     }
 
 }
